@@ -1,0 +1,9 @@
+@extends('layout')
+@section('content')<section class="auth-wrap"><div><span class="eyebrow">SELAMAT DATANG DI DAR MUTIARA</span><h1>Luangkan waktu.<br><em>Luaskan pemahaman.</em></h1><p>Perjalanan belajar yang baik dimulai dari satu langkah kecil.</p></div><div class="panel"><h2>{{ ['login'=>'Masuk ke ruang belajar','register'=>'Mulai perjalanan Anda','forgot'=>'Pulihkan kata sandi','reset'=>'Buat kata sandi baru'][$mode] }}</h2><form method="post" action="{{ ['login'=>route('login'),'register'=>route('register'),'forgot'=>route('password.email'),'reset'=>route('password.update')][$mode] }}">@csrf
+@if($mode==='register')<label>Nama lengkap<input required name="name" autocomplete="name" value="{{ old('name') }}" maxlength="100"></label>@endif
+@if($mode==='reset')<input type="hidden" name="token" value="{{ $token }}">@endif
+<label>Email<input required type="email" name="email" autocomplete="email" value="{{ old('email',$email??'') }}"></label>
+@if($mode!=='forgot')<label>Kata sandi<input required type="password" name="password" autocomplete="{{ $mode==='login'?'current-password':'new-password' }}" @if($mode!=='login')minlength="10"@endif></label>@endif
+@if(in_array($mode,['register','reset']))<label>Ulangi kata sandi<input required type="password" name="password_confirmation" autocomplete="new-password" minlength="10"></label><p class="muted">Gunakan minimal 10 karakter.</p>@endif
+@if($mode==='login')<label class="check"><input type="checkbox" name="remember" value="1"> Ingat saya</label>@endif
+<button class="button full">{{ ['login'=>'Masuk →','register'=>'Buat akun →','forgot'=>'Kirim tautan pemulihan','reset'=>'Simpan kata sandi'][$mode] }}</button></form><div class="auth-links">@if($mode==='login')<a href="{{ route('password.request') }}">Lupa kata sandi?</a><a href="{{ route('register') }}">Belum punya akun? Daftar</a>@else<a href="{{ route('login') }}">Kembali ke halaman masuk</a>@endif</div></div></section>@endsection
